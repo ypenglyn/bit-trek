@@ -1,0 +1,22 @@
+# emplty
+iphone7 => iphone, iphone7
+iphone7s => iphone, iphone7s
+iphone7c => iphone, iphone7c
+iphone6 => iphone, iphone6
+iphone6s => iphone, iphone6s
+iphone6c => iphone, iphone6c
+iphone5 => iphone, iphone5
+iphone5s => iphone, iphone5s
+iphone5c => iphone, iphone5c
+iphone4 => iphone, iphone4
+iphone4s => iphone, iphone4s
+ps2 => ps, ps2
+ps3 => ps, ps3
+ps4 => ps, ps4
+ps5 => ps, ps5
+
+FOUNDATION,ファンデ
+ERGObaby, エルゴ
+MERCURYDUO,マーキュリー
+キャミソール,キャミ
+サルエルパンツ,サルエル

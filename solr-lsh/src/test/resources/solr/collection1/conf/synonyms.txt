@@ -1,0 +1,41 @@
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#-----------------------------------------------------------------------
+#some test synonym mappings unlikely to appear in real input text
+
+ANAMÁ,ANAMA
+Aéropostale,Aeropostale
+Bollé,Bolle
+Børn,Born
+Caché,Cache
+Candie’s,Candie's
+Chloé,Chloe
+Comme des Garçons,Comme des Garcons
+Façonnable,Faconnable
+Fjällräven,Fjallraven
+Hard Rock Café,Hard Rock Cafe
+Harvé Benard,Harve Benard
+HERMÈS,HERMES
+KÖPPEN,KOPPEN
+Lolë,Lole
+Louis Féraud,Louis Feraud
+Mundo Único,Mundo Unico
+NYGÅRD,NYGARD
+Peter Nygård,Peter Nygard
+René Lezard,Rene Lezard
+Rosa Clará,Rosa Clara
+See by Chloé,See by Chloe
+Simone Pérèle,Simone Perele
+TEHÁMA,TEHAMA
+Trouvé,Trouve
+Yigal Azrouël,Yigal Azrouel
