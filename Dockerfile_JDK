@@ -1,0 +1,14 @@
+FROM java:alpine
+
+ENV EXAMPLE_PATH='examples'
+ENV BUILD_INDEX_PATH='build-index'
+ENV HASHER_JAR='hasher-0.0.1-SNAPSHOT.jar'
+
+RUN  mkdir -p /usr/local/app
+COPY ${EXAMPLE_PATH}/${BUILD_INDEX_PATH}/hasher/target/${HASHER_JAR} /usr/local/app
+COPY ${EXAMPLE_PATH}/${BUILD_INDEX_PATH}/hasher/entry.sh /usr/local/app
+EXPOSE 8080
+
+RUN apk add --no-cache bash
+
+ENTRYPOINT ["/usr/local/app/entry.sh"]

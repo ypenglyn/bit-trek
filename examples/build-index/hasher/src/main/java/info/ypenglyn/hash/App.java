@@ -21,7 +21,7 @@ public class App {
 
     // NOTE: Change the dimension to match your requirement
     // NOTE: Keep seed same from indexing and searching both
-    private static SuperBitHash hasher = SuperBitHash.getInstance().init(2048, 8, 16, 100L);
+    private static SuperBitHash hasher = SuperBitHash.getInstance().init(784, 8, 16, 100L);
     private static Gson gson = new GsonBuilder().create();
     private static Encoder encoder = Base64.getEncoder();
 

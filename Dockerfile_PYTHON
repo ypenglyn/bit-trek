@@ -1,0 +1,11 @@
+#FROM python:alpine
+FROM tensorflow/tensorflow:latest
+
+ENV EXAMPLE_PATH='examples'
+ENV BUILD_INDEX_PATH='build-index'
+
+RUN  mkdir -p /usr/local/app
+COPY ${EXAMPLE_PATH}/${BUILD_INDEX_PATH}/indexer /usr/local/app/indexer
+RUN  pip install -r /usr/local/app/indexer/requirements.txt
+
+ENTRYPOINT ["/usr/local/app/indexer/entry.sh"]
