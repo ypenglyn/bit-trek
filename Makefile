@@ -18,6 +18,7 @@ login:  ## attach in docker
 	@docker exec -it bit-trek bash
 
 example-hasher: ## build test index with mnist image
+	@cd solr-lsh && mvn install && cd ..
 	@cd examples/build-index/hasher && mvn clean package && cd ../..
 	@docker build -f Dockerfile_JDK -t test/hasher:latest .
 	@docker run -it --rm -p 8080:8080 --name hasher test/hasher:latest
