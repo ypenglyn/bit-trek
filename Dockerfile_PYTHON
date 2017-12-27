@@ -1,4 +1,3 @@
-#FROM python:alpine
 FROM tensorflow/tensorflow:latest
 
 ENV EXAMPLE_PATH='examples'
