@@ -18,27 +18,32 @@ HASHER_END_POINT = 'http://172.17.0.1:8080/hash'
 def main(unused_argv):
     # Load training and eval data
     mnist = tf.contrib.learn.datasets.load_dataset("mnist")
-    train_data = mnist.train.images  # Returns np.array
+    train_data = mnist.train.images
+    train_label = mnist.train.labels.tolist()
     print(train_data.shape)
 
     solr = Solr(SOLR_INDEXING_END_POINT, timeout=100)
     solr.delete('*:*')
 
-    counter = 0
+    # resize batch size in case of large dimension vector
+    batch_size = 20
     chunk = []
-    for row in train_data.tolist():
-        chunk.append(row)
-        counter += 1
-        if counter != 0 and counter % 50 == 0:
-            print('Current indexig offset is {idx}.'.format(idx=counter))
-            hashed_chunk = hash(chunk, counter - 50)
+    chunk_label = []
+    for idx in range(0, train_data.shape[0]):
+        chunk.append(train_data[idx].tolist())
+        chunk_label.append(train_label[idx])
+        if idx != 0 and idx % batch_size == 0:
+            print('Current indexig offset is {idx}.'.format(idx=idx))
+            hashed_chunk = hash(chunk, chunk_label, idx - batch_size)
             solr.update(hashed_chunk)
             solr.commit()
             chunk[:] = []
+            chunk_label[:] = []
+
     solr.commit()
 
 
-def hash(data, offset=0):
+def hash(data, data_label, offset=0):
     json_fmt = json.dumps(data)
     r = req.post(HASHER_END_POINT, data={'value': json_fmt})
 
@@ -46,7 +51,7 @@ def hash(data, offset=0):
     result_list = []
     data_size = len(data)
     for i in range(0, data_size):
-        result_list.append({'id': str(offset + i), 'bits': bits[i]})
+        result_list.append({'id': str(offset + i) + '_' + str(data_label[i]), 'bits': bits[i]})
     return result_list
 
 
