@@ -7,6 +7,7 @@ from __future__ import print_function
 import json
 import tensorflow as tf
 import requests as req
+import numpy as np
 from app.solr import Solr
 
 tf.logging.set_verbosity(tf.logging.INFO)
@@ -29,18 +30,23 @@ def main(unused_argv):
     batch_size = 20
     chunk = []
     chunk_label = []
-    for idx in range(0, train_data.shape[0]):
-        chunk.append(train_data[idx].tolist())
-        chunk_label.append(train_label[idx])
+    for idx in range(1, train_data.shape[0] + 1):
+        chunk.append(norm(train_data[idx - 1]).tolist())
+        chunk_label.append(train_label[idx - 1])
         if idx != 0 and idx % batch_size == 0:
             print('Current indexig offset is {idx}.'.format(idx=idx))
-            hashed_chunk = hash(chunk, chunk_label, idx - batch_size)
+            hashed_chunk = hash(chunk, chunk_label, idx - batch_size - 1)
             solr.update(hashed_chunk)
             solr.commit()
             chunk[:] = []
             chunk_label[:] = []
 
     solr.commit()
+
+
+def norm(v):
+    n = np.linalg.norm(v)
+    return v / n
 
 
 def hash(data, data_label, offset=0):

@@ -125,12 +125,12 @@
 
     <field name="bits_match_3" type="text_bits_3" indexed="true" stored="false" />
     <field name="bits_match_4" type="text_bits_4" indexed="true" stored="false" />
-    <field name="bits_match_34" type="text_bits_34" indexed="true" stored="false" />
+    <field name="bits_match_2" type="text_bits_2" indexed="true" stored="false" />
     <field name="bits" type="string" indexed="true" stored="true" required="true"/>
 
     <copyField source="bits" dest="bits_match_3"/>
     <copyField source="bits" dest="bits_match_4"/>
-    <copyField source="bits" dest="bits_match_34"/>
+    <copyField source="bits" dest="bits_match_2"/>
 
     <!-- Only enabled in the "schemaless" data-driven example (assuming the client
          does not know what fields may be searched) because it's very expensive to index everything twice. -->
@@ -382,10 +382,10 @@
      </analyzer>
     </fieldType>
 
-    <fieldType name="text_bits_34" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_bits_2" class="solr.TextField" positionIncrementGap="100">
      <analyzer>
        <tokenizer class="solr.KeywordTokenizerFactory"/>
-       <filter class="solr.NGramTokenizerFactory" minGramSize="3" maxGramSize="4"/>
+       <filter class="solr.NGramTokenizerFactory" minGramSize="2" maxGramSize="2"/>
      </analyzer>
     </fieldType>
 
