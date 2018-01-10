@@ -8,12 +8,13 @@ import json
 import tensorflow as tf
 import requests as req
 import numpy as np
+import base64
 from app.solr import Solr
 
 tf.logging.set_verbosity(tf.logging.INFO)
 # NOTE: change hostname to yours
 SOLR_INDEXING_END_POINT = 'http://172.17.0.1:8983/solr/bits'
-HASHER_END_POINT = 'http://172.17.0.1:8080/hash'
+HASHER_END_POINT = 'http://172.17.0.1:8080/quantize'
 
 
 def main(unused_argv):
@@ -57,7 +58,10 @@ def hash(data, data_label, offset=0):
     result_list = []
     data_size = len(data)
     for i in range(0, data_size):
-        result_list.append({'id': str(offset + i) + '_' + str(data_label[i]), 'bits': bits[i]})
+        scode = bits[i].get('scode')
+        mcode = bits[i].get('mcode')
+        lcode = bits[i].get('lcode')
+        result_list.append({'id': str(offset + i) + '_' + str(data_label[i]), 'bits': scode, 'q1': mcode, 'q2': lcode})
     return result_list
 
 

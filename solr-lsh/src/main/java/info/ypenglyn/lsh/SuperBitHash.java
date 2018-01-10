@@ -29,6 +29,10 @@ public class SuperBitHash implements VHash {
         return HasherHolder.instance;
     }
 
+    public static SuperBitHash getNewInstance() {
+        return new SuperBitHash();
+    }
+
     public SuperBitHash init(int dim, int l, int n, long seed) {
         if (dim <= 0) {
             throw new IllegalArgumentException("Dimension d must be larger than 0");
@@ -128,6 +132,7 @@ public class SuperBitHash implements VHash {
                 "Hyper plane is not initialized properly or empty vector");
         }
         RealVector realVector = this.hyperplane.preMultiply(vector);
+
         BitSet bits = new BitSet(realVector.getDimension());
         for (int i = 0; i < realVector.getDimension(); i++) {
             if (realVector.getEntry(i) >= 0) {

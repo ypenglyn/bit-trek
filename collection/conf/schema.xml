@@ -123,14 +123,25 @@
     <field name="_root_" type="string" indexed="true" stored="false" docValues="false" />
     <field name="_text_" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
-    <field name="bits_match_3" type="text_bits_3" indexed="true" stored="false" />
-    <field name="bits_match_4" type="text_bits_4" indexed="true" stored="false" />
-    <field name="bits_match_2" type="text_bits_2" indexed="true" stored="false" />
     <field name="bits" type="string" indexed="true" stored="true" required="true"/>
+    <field name="q1" type="string" indexed="true" stored="true" required="true"/>
+    <field name="q2" type="string" indexed="true" stored="true" required="true"/>
 
-    <copyField source="bits" dest="bits_match_3"/>
-    <copyField source="bits" dest="bits_match_4"/>
-    <copyField source="bits" dest="bits_match_2"/>
+    <field name="bits_match_24" type="text_bits_24" indexed="true" stored="false" />
+    <field name="bits_match_18" type="text_bits_18" indexed="true" stored="false" />
+    <field name="bits_match_12" type="text_bits_12" indexed="true" stored="false" />
+    <field name="bits_match_6" type="text_bits_6" indexed="true" stored="false" />
+
+    <field name="bits_match_4_q1" type="text_bits_4" indexed="true" stored="false" />
+    <field name="bits_match_3_q1" type="text_bits_3" indexed="true" stored="false" />
+
+    <field name="bits_match_4_q2" type="text_bits_4" indexed="true" stored="false" />
+    <field name="bits_match_3_q2" type="text_bits_3" indexed="true" stored="false" />
+
+    <copyField source="q1" dest="bits_match_4_q1"/>
+    <copyField source="q1" dest="bits_match_3_q1"/>
+    <copyField source="q2" dest="bits_match_4_q2"/>
+    <copyField source="q2" dest="bits_match_3_q2"/>
 
     <!-- Only enabled in the "schemaless" data-driven example (assuming the client
          does not know what fields may be searched) because it's very expensive to index everything twice. -->
@@ -367,6 +378,12 @@
       <analyzer class="org.apache.lucene.analysis.el.GreekAnalyzer"/>
     </fieldType>
     -->
+    <fieldType name="text_bits_3" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+       <tokenizer class="solr.KeywordTokenizerFactory"/>
+       <filter class="solr.NGramTokenizerFactory" minGramSize="3" maxGramSize="3"/>
+     </analyzer>
+    </fieldType>
 
     <fieldType name="text_bits_4" class="solr.TextField" positionIncrementGap="100">
      <analyzer>
@@ -375,17 +392,79 @@
      </analyzer>
     </fieldType>
 
-    <fieldType name="text_bits_3" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_bits_6" class="solr.TextField" positionIncrementGap="100">
      <analyzer>
        <tokenizer class="solr.KeywordTokenizerFactory"/>
-       <filter class="solr.NGramTokenizerFactory" minGramSize="3" maxGramSize="3"/>
+       <filter class="solr.NGramTokenizerFactory" minGramSize="6" maxGramSize="6"/>
      </analyzer>
     </fieldType>
 
-    <fieldType name="text_bits_2" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_bits_12" class="solr.TextField" positionIncrementGap="100">
      <analyzer>
        <tokenizer class="solr.KeywordTokenizerFactory"/>
-       <filter class="solr.NGramTokenizerFactory" minGramSize="2" maxGramSize="2"/>
+       <filter class="solr.NGramTokenizerFactory" minGramSize="12" maxGramSize="12"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_bits_24" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+       <tokenizer class="solr.KeywordTokenizerFactory"/>
+       <filter class="solr.NGramTokenizerFactory" minGramSize="24" maxGramSize="24"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_bits_18" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+       <tokenizer class="solr.KeywordTokenizerFactory"/>
+       <filter class="solr.NGramTokenizerFactory" minGramSize="18" maxGramSize="18"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ptn_1" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+             <tokenizer class="solr.PatternTokenizerFactory" pattern="[01]{0}([01]{16})[01]*" group="1"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ptn_2" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+             <tokenizer class="solr.PatternTokenizerFactory" pattern="[01]{16}([01]{16})[01]*" group="1"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ptn_3" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+             <tokenizer class="solr.PatternTokenizerFactory" pattern="[01]{32}([01]{16})[01]*" group="1"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ptn_4" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+             <tokenizer class="solr.PatternTokenizerFactory" pattern="[01]{48}([01]{16})[01]*" group="1"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ptn_5" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+             <tokenizer class="solr.PatternTokenizerFactory" pattern="[01]{64}([01]{16})[01]*" group="1"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ptn_6" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+             <tokenizer class="solr.PatternTokenizerFactory" pattern="[01]{80}([01]{16})[01]*" group="1"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ptn_7" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+             <tokenizer class="solr.PatternTokenizerFactory" pattern="[01]{96}([01]{16})[01]*" group="1"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ptn_8" class="solr.TextField" positionIncrementGap="100">
+     <analyzer>
+             <tokenizer class="solr.PatternTokenizerFactory" pattern="[01]{112}([01]{16})[01]*" group="1"/>
      </analyzer>
     </fieldType>
 

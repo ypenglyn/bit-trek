@@ -69,6 +69,9 @@ public class TestSuperBitHash
 
         SuperBitHash sim = SuperBitHash.getInstance();
 
+        assertEquals(32 * 4, tester.hash(testData1).length());
+        assertEquals(32 * 4, tester.hash(testData2).length());
+
         assertEquals(1,
             sim.similarity(tester.hash(testData1), tester.hash(testData2)), 10e-3);
         assertEquals(0.12,
