@@ -132,12 +132,17 @@
     <field name="bits_match_12" type="text_bits_12" indexed="true" stored="false" />
     <field name="bits_match_6" type="text_bits_6" indexed="true" stored="false" />
 
+    <field name="bits_match_4_q0" type="text_bits_4" indexed="true" stored="false" />
+    <field name="bits_match_3_q0" type="text_bits_3" indexed="true" stored="false" />
+
     <field name="bits_match_4_q1" type="text_bits_4" indexed="true" stored="false" />
     <field name="bits_match_3_q1" type="text_bits_3" indexed="true" stored="false" />
 
     <field name="bits_match_4_q2" type="text_bits_4" indexed="true" stored="false" />
     <field name="bits_match_3_q2" type="text_bits_3" indexed="true" stored="false" />
 
+    <copyField source="bits" dest="bits_match_4_q0"/>
+    <copyField source="bits" dest="bits_match_3_q0"/>
     <copyField source="q1" dest="bits_match_4_q1"/>
     <copyField source="q1" dest="bits_match_3_q1"/>
     <copyField source="q2" dest="bits_match_4_q2"/>
