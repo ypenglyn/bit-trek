@@ -33,6 +33,13 @@ public class SuperBitHash implements VHash {
         return new SuperBitHash();
     }
 
+    /**
+     * @param dim, vector dimensions
+     * @param l, batch size of super bit
+     * @param n, super bit depth
+     * @param seed, random seed for gaussian distribution sampling
+     * @return SuperBitHash instance
+     */
     public SuperBitHash init(int dim, int l, int n, long seed) {
         if (dim <= 0) {
             throw new IllegalArgumentException("Dimension d must be larger than 0");
@@ -161,6 +168,6 @@ public class SuperBitHash implements VHash {
 
     private static class HasherHolder {
 
-        private static final SuperBitHash instance = new SuperBitHash();
+        private static final SuperBitHash instance = SuperBitHash.getNewInstance();
     }
 }
