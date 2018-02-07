@@ -2,28 +2,23 @@ package info.ypenglyn.lsh;
 
 
 import java.io.Serializable;
-import java.util.BitSet;
+
 import org.apache.commons.math3.linear.ArrayRealVector;
 
 /**
  * Generate local sensitive hash for input vector.
  */
-public interface VHash extends Serializable {
+public interface LocalitySensitiveHash extends Serializable {
 
     /**
      * Hash given vector to bit array.
      */
-    public BitSet hash(final double[] vector);
+    public byte[] hash(final double[] vector);
 
     /**
      * Hash given vector to bit array.
      */
-    public BitSet hash(final ArrayRealVector vector);
-
-    /**
-     * Calculate cosine similarity.
-     */
-    public double similarity(final BitSet hash1, final BitSet hash2);
+    public byte[] hash(final ArrayRealVector vector);
 
     /**
      * Calculate cosine similarity with byte array directly.

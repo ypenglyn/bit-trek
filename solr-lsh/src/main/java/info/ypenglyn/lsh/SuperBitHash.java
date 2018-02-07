@@ -1,15 +1,12 @@
 package info.ypenglyn.lsh;
 
 import java.util.BitSet;
-import java.util.Random;
+
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.BlockRealMatrix;
 import org.apache.commons.math3.linear.QRDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
-import org.apache.commons.math3.random.GaussianRandomGenerator;
-import org.apache.commons.math3.random.RandomGeneratorFactory;
-import org.apache.commons.math3.random.UncorrelatedRandomVectorGenerator;
 
 /**
  * A implementation of Super-Bit Locality-Sensitive Hash.
@@ -17,7 +14,7 @@ import org.apache.commons.math3.random.UncorrelatedRandomVectorGenerator;
  * @see <a href="https://papers.nips.cc/paper/4847-super-bit-locality-sensitive-hashing.pdf">Jianqiu
  * Ji et al.</a>
  */
-public class SuperBitHash implements VHash {
+public class SuperBitHash extends RandomAmplifyHash {
 
     private static final long serialVersionUID = -7604766932017737125L;
     private RealMatrix hyperplane;
@@ -34,9 +31,9 @@ public class SuperBitHash implements VHash {
     }
 
     /**
-     * @param dim, vector dimensions
-     * @param l, batch size of super bit
-     * @param n, super bit depth
+     * @param dim,  vector dimensions
+     * @param l,    batch size of super bit
+     * @param n,    super bit depth
      * @param seed, random seed for gaussian distribution sampling
      * @return SuperBitHash instance
      */
@@ -55,27 +52,9 @@ public class SuperBitHash implements VHash {
 
         int bitLength = n * l;
         this.hyperplane = generateSBHyperplane(l, n,
-            generateRandomHyperplane(dim, bitLength, seed));
+                generateRandomHyperplane(dim, bitLength, seed));
 
         return this;
-    }
-
-    /**
-     * Generate random generated hyper planes
-     */
-    protected RealMatrix generateRandomHyperplane(int dim, int bitLength,
-        long seed) {
-        RealMatrix hyperplane = new BlockRealMatrix(dim, bitLength);
-
-        GaussianRandomGenerator rawGenerator = new GaussianRandomGenerator(
-            RandomGeneratorFactory.createRandomGenerator(new Random(seed)));
-        UncorrelatedRandomVectorGenerator vectorGenerator = new UncorrelatedRandomVectorGenerator(
-            dim, rawGenerator);
-
-        for (int i = 0; i < bitLength; i++) {
-            hyperplane.setColumn(i, vectorGenerator.nextVector());
-        }
-        return hyperplane;
     }
 
     /**
@@ -83,10 +62,10 @@ public class SuperBitHash implements VHash {
      * This implementation use householder transformation to obtain orthogonal hyper planes.
      */
     protected RealMatrix generateSBHyperplane(int l, int n,
-        RealMatrix rawHyperplane) {
+                                              RealMatrix rawHyperplane) {
         if (l * n != rawHyperplane.getColumnDimension()) {
             throw new IllegalArgumentException(
-                "Batch size or depth is not matched with random hyper plane matrix size");
+                    "Batch size or depth is not matched with random hyper plane matrix size");
         }
 
         int dimension = rawHyperplane.getRowDimension();
@@ -96,7 +75,7 @@ public class SuperBitHash implements VHash {
             RealMatrix orthogonalBlock = orthogonalize(block);
             for (int j = n * i; j < n * i + n; j++) {
                 RealVector currentVector = new ArrayRealVector(
-                    orthogonalBlock.getColumn(j - n * i));
+                        orthogonalBlock.getColumn(j - n * i));
                 double currentNorm = currentVector.getNorm();
                 RealVector normalizedVector = currentVector.mapDivide(currentNorm);
                 sbHyperplane.setColumn(j, normalizedVector.toArray());
@@ -114,10 +93,10 @@ public class SuperBitHash implements VHash {
      * {@inheritDoc}
      */
     @Override
-    public BitSet hash(double[] vector) {
+    public byte[] hash(double[] vector) {
         if (this.hyperplane == null || vector == null) {
             throw new IllegalArgumentException(
-                "Hyper plane is not initialized properly or empty vector");
+                    "Hyper plane is not initialized properly or empty vector");
         }
         double[] realVector = this.hyperplane.preMultiply(vector);
         BitSet bits = new BitSet(realVector.length);
@@ -126,17 +105,17 @@ public class SuperBitHash implements VHash {
                 bits.set(i);
             }
         }
-        return bits;
+        return bits.toByteArray();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public BitSet hash(ArrayRealVector vector) {
+    public byte[] hash(ArrayRealVector vector) {
         if (this.hyperplane == null || vector == null) {
             throw new IllegalArgumentException(
-                "Hyper plane is not initialized properly or empty vector");
+                    "Hyper plane is not initialized properly or empty vector");
         }
         RealVector realVector = this.hyperplane.preMultiply(vector);
 
@@ -146,7 +125,7 @@ public class SuperBitHash implements VHash {
                 bits.set(i);
             }
         }
-        return bits;
+        return bits.toByteArray();
     }
 
     /**

@@ -1,12 +1,14 @@
 package info.ypenglyn.solr;
 
 import info.ypenglyn.lsh.SuperBitHash;
+
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.BitSet;
 import java.util.Map;
 import java.util.Objects;
+
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.queries.function.FunctionValues;
 import org.apache.lucene.queries.function.ValueSource;
@@ -26,37 +28,37 @@ public class CosineSimilarityFunction extends ValueSource {
     private final ValueSource bits;
     private final SuperBitHash hasher;
     /**
-     * result of decoded bits
+     * result of decoded byte[]
      **/
-    private final BitSet currentQueryBits;
+    private final byte[] currentQueryBytes;
 
     CosineSimilarityFunction(ValueSource bits, String current, SuperBitHash hasher)
-        throws SyntaxError {
+            throws SyntaxError {
         try {
             this.hasher = hasher;
             this.bits = bits;
-            this.currentQueryBits = decode(current);
+            this.currentQueryBytes = decode(current);
         } catch (Exception e) {
             throw new SyntaxError("Failed to initialize function with " + e.getMessage());
         }
     }
 
     /**
-     * Decode base64 string to bit set
+     * Decode base64 string to byte[]
      */
-    protected static BitSet decode(String base64) {
-        return BitSet.valueOf(decoder.decode(base64.getBytes()));
+    protected static byte[] decode(String base64) {
+        return decoder.decode(base64.getBytes());
     }
 
     @Override
     public FunctionValues getValues(Map map, LeafReaderContext leafReaderContext)
-        throws IOException {
+            throws IOException {
         final FunctionValues bitsBase64 = bits.getValues(map, leafReaderContext);
         return new DoubleDocValues(this) {
             @Override
             public double doubleVal(int docIdx) throws IOException {
-                BitSet bitSet = decode(bitsBase64.strVal(docIdx));
-                return hasher.similarity(currentQueryBits, bitSet);
+                byte[] bytes = decode(bitsBase64.strVal(docIdx));
+                return hasher.similarity(currentQueryBytes, bytes);
             }
         };
     }
@@ -67,7 +69,7 @@ public class CosineSimilarityFunction extends ValueSource {
             return false;
         }
         CosineSimilarityFunction other = (CosineSimilarityFunction) o;
-        if (bits.equals(other.bits) && currentQueryBits.equals(other.currentQueryBits)) {
+        if (bits.equals(other.bits) && currentQueryBytes.equals(other.currentQueryBytes)) {
             return true;
         }
         return false;
@@ -75,7 +77,7 @@ public class CosineSimilarityFunction extends ValueSource {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.bits, this.currentQueryBits);
+        return Objects.hash(this.bits, this.currentQueryBytes);
     }
 
     @Override
